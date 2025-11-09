@@ -24,9 +24,9 @@ export async function loadData(base) {
     races
   ] = await Promise.all([
     d3.csv(`${base}${DATA_PATH}/drivers.csv`, d3.autoType),
-    d3.csv(`${base}${DATA_PATH}/driver_standings.csv`, d3.autoType),
+    d3.csv(`${base}${DATA_PATH}/drivers_standings.csv`, d3.autoType),
     d3.csv(`${base}${DATA_PATH}/constructors.csv`, d3.autoType),
-    d3.csv(`${base}${DATA_PATH}/constructor_standings.csv`, d3.autoType),
+    d3.csv(`${base}${DATA_PATH}/constructors_standings.csv`, d3.autoType),
     d3.csv(`${base}${DATA_PATH}/races.csv`, d3.autoType)
   ]);
 

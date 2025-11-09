@@ -1,0 +1,16 @@
+{
+  "python.linting.enabled": true,
+  "python.linting.ruffEnabled": true,
+  "python.linting.lintOnSave": true,
+  "python.formatting.provider": "ruff",
+  "editor.formatOnSave": true,
+  "ruff.lint.enable": true,
+  "ruff.format.enable": true,
+  "[python]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    },
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true
+  }
+}
