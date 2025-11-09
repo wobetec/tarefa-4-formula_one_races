@@ -1,0 +1,68 @@
+# Nome do seu workflow, aparecerá na aba "Actions" do GitHub
+name: Atualização Semanal de Dados
+
+on:
+  # 1. Gatilho por agendamento (cron job)
+  # Este cron "0 8 * * 1" roda toda Segunda-feira às 8:00 UTC
+  # Ajuste o horário (8) conforme sua necessidade (manhã)
+  schedule:
+    - cron: '0 8 * * 1'
+  
+  # 2. Gatilho manual (para testes)
+  # Permite que você rode o job manualmente pela interface do GitHub
+  workflow_dispatch:
+
+# Define as permissões que o job terá.
+# "contents: write" é essencial para permitir que o job faça commits.
+permissions:
+  contents: write
+
+jobs:
+  # Nome do job
+  build-and-commit:
+    # Usará a versão mais recente do Ubuntu como sistema operacional
+    runs-on: ubuntu-latest
+
+    steps:
+      # Etapa 1: Baixar o código do repositório (branch main)
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      # Etapa 2: Configurar o Python 3.13
+      - name: Configurar Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      # Etapa 3: Configurar o 'uv' (da astral-sh)
+      # Esta é a action oficial para instalar o 'uv' no ambiente
+      - name: Configurar uv
+        uses: astral-sh/setup-uv@v1
+        with:
+          uv-version: latest # Pega a versão mais recente do uv
+
+      # Etapa 4: Instalar as dependências com 'uv sync'
+      # Assume que você tem um 'requirements.txt' ou 'pyproject.toml'
+      - name: Instalar dependências
+        run: uv sync
+
+      # Etapa 5: Rodar o seu script CLI
+      - name: Executar script de atualização
+        run: python main.py update -d static/data
+
+      # Etapa 6: Fazer o commit das alterações
+      # Esta action verifica se há arquivos modificados e faz o commit
+      - name: Commitar e salvar alterações
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          # Mensagem do commit
+          commit_message: "chore(data): Atualiza dados (via GitHub Action)"
+          
+          # Branch onde o commit será feito
+          branch: main
+          
+          # Opcional, mas recomendado:
+          # Define quais arquivos/pastas a action deve monitorar.
+          # Se o script só altera 'static/data', isso evita commits acidentais.
+          # Use 'static/data/*' se for uma pasta com múltiplos arquivos.
+          file_pattern: static/data/* ```
